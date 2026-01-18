@@ -10,7 +10,7 @@ Kubernetes is an open-source system developed by Google, now overseen by the CNC
 - Kubernetes self-healing feature automatically restarts failing containers and replaces unhealthy containers
 
 ## Pre-requisites
-To install Kubernetes on a Ubuntu machine, make sure it meets the following requirements:
+To install Kubernetes on a Ubuntu 22.04 Long-Term-Service (LTS) machine, make sure it meets the following requirements:
 - 2 CPUs
 - At least 2GB of RAM
 - At least 8 GB of Disk Space (recommended) 
@@ -18,13 +18,12 @@ To install Kubernetes on a Ubuntu machine, make sure it meets the following requ
 If the machine meets the above requirements, you are ready to follow this tutorial. Let’s start with the step-by-step process on how to install Kubernetes on Ubuntu.
 
 > [!NOTE]
-> It is recommended to install Kubernetes on Ubuntu 22.04 (Jammy Jellyfish) Long-Term-Service (LTS). Using the official Kubernetes documentation for installing and managing Kubernetes on Ubuntu 22.04 provides significant advantages in terms of reliability, security, and accuracy, particularly by leveraging kubeadm for cluster bootstrapping. It ensures that the installation follows best practices, such as disabling swap, using appropriate container runtimes (like containerd), and setting up necessary CNI plugins.
+> It is recommended to install Kubernetes on Ubuntu 22.04 LTS (Jammy Jellyfish). Using the official Kubernetes documentation for installing and managing Kubernetes on Ubuntu 22.04 provides significant advantages in terms of reliability, security, and accuracy, particularly by leveraging kubeadm for cluster bootstrapping. It ensures that the installation follows best practices, such as disabling swap, using appropriate container runtimes (like containerd), and setting up necessary CNI plugins.
 
 ## Installing Kubernetes on Ubuntu
 Installing Kubernetes is not a straightforward task. To create a flexible and high-performing cluster, it will need to follow several steps other than installing Kubernetes components. Also, we have to configure machines in a way they can communicate with each other
 
 Overall, installing Kubernetes on Ubuntu involves steps such as:
-
 - Disabling swap
 - Setting up hostnames
 - Setting up the IPV4 bridge on all nodes
