@@ -179,11 +179,47 @@ _apt-mark hold_ is used to prevent the automatic installation, upgrade or remova
 <img width="468" height="67" alt="image" src="https://github.com/user-attachments/assets/5a7b914c-7ff2-4ce3-87af-b5cc1e05f5d8" /> <br>
 
 Worker node <br>
-<img width="403" height="212" alt="image" src="https://github.com/user-attachments/assets/08c477c9-d171-4e05-b687-cad07ec29e4e" /><br>
-<img width="426" height="337" alt="image" src="https://github.com/user-attachments/assets/69b0d172-9052-4f98-aa02-f49b19bfc45f" /><br>
+
+<img width="2976" height="1566" alt="image" src="https://github.com/user-attachments/assets/bd1412bb-0923-47d9-bbe3-c02e330da1b6" /><br>
+<img width="2660" height="2102" alt="image" src="https://github.com/user-attachments/assets/fced6a6e-452e-49e5-b331-e913f95d73ae" /><br>
 <img width="409" height="63" alt="image" src="https://github.com/user-attachments/assets/4845773b-27ce-4fd7-b393-b1f40ec7a84b" /><br>
 
 ### Step 6 - Install Docker
+The Docker platform allows you to create, distribute, and run applications within containers. These containers offer a lightweight and portable environment, ensuring consistent performance across various setups. Docker serves as the container runtime, playing a vital role in Kubernetes by facilitating the efficient management and deployment of containerized applications. Install docker with the command:
+```
+sudo apt install docker.io
+```
+_Note –_ docker.io installs Full Docker Engine that includes Docker CLI, containerd, daemon, networking and image management
+<img width="2940" height="3146" alt="image" src="https://github.com/user-attachments/assets/5217945b-ad35-4c7b-9d11-9c327a49b42a" /><br>
+
+Next, configure containerd on all nodes to ensure its compatibility with Kubernetes. First, create a folder for the configuration file with the sudo mkdir /etc/containerd command.
+```
+sudo mkdir /etc/containerd
+```
+
+Then, create a default configuration file for containerd and save it as config.toml using the sudo sh -c "containerd config default > /etc/containerd/config.toml" command.
+```
+sudo sh -c "containerd config default > /etc/containerd/config.toml"
+```
+
+After running these commands, we need to modify the config.toml file to locate the entry that sets "SystemdCgroup" to false and changes its value to true. This is important because Kubernetes requires all its components, and the container runtime uses systemd for cgroups.
+```
+sudo sed -i 's/ SystemdCgroup = false/ SystemdCgroup = true/' /etc/containerd/config.toml
+```
+
+Next, restart containerd and kubelet services to apply the changes you made on all nodes.
+```
+sudo systemctl restart containerd.service
+sudo systemctl restart kubelet.service
+```
+
+And enable kubelet service 
+```
+sudo systemctl enable kubelet.service
+```
+**_Repeat the same commands in worker node_**
+
+### Step 7 - Initialize the Kubernetes cluster on the master node
 
 
 
