@@ -38,7 +38,7 @@ Overall, installing Kubernetes on Ubuntu involves steps such as:
 > Create Two EC2 instances. One for **Master Node** and another for **Worker Node**
 
 ### Step 0 - Update & Upgrade
-Any EC2 instance, for that matter any linux based system, first step is to update and upgrade the package index
+On any Linux-based system, including EC2 instances, the first step is to update and upgrade the system package index
 ```
 sudo apt update && apt upgrade -y
 ```
@@ -78,3 +78,116 @@ This step is to update the /etc/hosts file to enable host name resolution. Once 
 
 _Note:_ Make sure to enable All IMCP – IPv4 in Security groups for both the EC2 instances
 <img width="468" height="138" alt="image" src="https://github.com/user-attachments/assets/468e8410-d697-4291-b04d-8a93c939d150" />
+
+```
+sudo nano /etc/hosts
+```
+At the bottom of the file, add the master and worker nodes IP addresses (as shown below)
+
+Master node <br>
+<img width="468" height="373" alt="image" src="https://github.com/user-attachments/assets/469d4378-2a6e-49c8-9e07-310d7378669b" />
+
+Worker node<br>
+<img width="468" height="405" alt="image" src="https://github.com/user-attachments/assets/5b86d00f-25b9-468c-be4e-626cef20c6f0" />
+
+Now ping test between Master and Worker nodes from the both the nodes respectively
+```
+ping -c 4 k8s-master
+ping -c 4 k8s-worker
+```
+Master node <br>
+<img width="468" height="283" alt="image" src="https://github.com/user-attachments/assets/52867fa6-c610-4d9a-a7af-9faeb72cf875" />
+
+Worker node <br>
+<img width="468" height="294" alt="image" src="https://github.com/user-attachments/assets/6667ac7b-199f-4d4f-9533-b493acf28ae4" />
+
+### Step 4 - Set up the IPv4 bridge on all nodes
+In this step we're going to configure ipv4 bridge on all the nodes and this involves loading the kernel modules. The below command creates a configuration file for Kubernetes and adds two entries – overlay and the br_netfilter
+```
+cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+overlay
+br_netfilter
+EOF
+sudo modprobe overlay
+sudo modprobe br_netfilter
+```
+
+Create another configuration file (the critical kernel parameters) to add specific network entries and persists these changes across reboots by running
+```
+cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward                 = 1
+EOF
+sudo sysctl --system
+```
+Master node <br>
+<img width="368" height="210" alt="image" src="https://github.com/user-attachments/assets/155c2ddb-ab5c-4cde-ba62-8e7fd95a46a9" /><br>
+<img width="351" height="377" alt="image" src="https://github.com/user-attachments/assets/bd8966f1-cee4-4ea1-a43a-a287be786c4e" />
+
+Worker node <br>
+<img width="388" height="193" alt="image" src="https://github.com/user-attachments/assets/427cc4df-1b00-4f6b-859a-dc268baa2100" /><br>
+<img width="359" height="379" alt="image" src="https://github.com/user-attachments/assets/cccf67a4-6db0-41f6-9d82-3624669f3928" />
+
+### Step 5 - Install kubelet, kubeadm, and kubectl on each node
+This step is to install kubelet, kubeadm, and kubectl on each node to create a Kubernetes cluster. These k8s packages play an important role in managing a Kubernetes cluster
+
+_Kubelet_ is the node agent that runs on every node and is responsible for ensuring containers are running in a Pod as specified by the Pod's specifications. (Pods are the smallest deployable units in a Kubernetes cluster).
+
+_Kubeadm_ is used to bootstrap a Kubernetes cluster, including setting up the master node and helping worker nodes join the cluster.
+
+_Kubectl_ is a CLI tool for Kubernetes to run commands to perform various actions such as deploying applications, inspecting resources, and managing cluster operations directly from the terminal.
+
+Before installing these, we must update the package index
+```
+sudo apt update
+```
+To install the requisite packages (on both Master and worker nodes)
+```
+sudo apt install -y ca-certificates curl gpg
+```
+<img width="468" height="305" alt="image" src="https://github.com/user-attachments/assets/61e0a81b-fb0e-4ddf-a10e-9d14e9589f21" /><br>
+
+Fetch the public key from Google and store it in the folder we created in the previous step. This key is important to verify that the Kubernetes packages we download are genuine and haven't been tampered with
+```
+sudo mkdir -p /etc/apt/keyrings
+
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+```
+Add the gpg key and create the Kubernetes repository and add it to the system
+```
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list	
+Now again update the package indes
+
+sudo apt update
+```
+<img width="468" height="163" alt="image" src="https://github.com/user-attachments/assets/41669a30-4845-4ae7-860f-85ded96cffd8" /><br>
+
+Now we are ready to install kubelet, kubeadm, and kubectl (with version and without version)
+```
+sudo apt install -y kubelet=1.26.5-00 kubeadm=1.26.5-00 kubectl=1.26.5-00 
+                          or
+sudo apt install -y kubelet kubeadm kubectl
+```
+<img width="468" height="352" alt="image" src="https://github.com/user-attachments/assets/751c61f9-384d-4efb-a811-76831456d3fc" /><br>
+
+Lock the version
+```
+sudo apt-mark hold kubelet kubeadm kubectl
+```
+_apt-mark hold_ is used to prevent the automatic installation, upgrade or removal of specific packages by package management tools like apt or apt-get. This is particularly useful when you need to maintain a specific version of a package or prevent accidental system changes
+<img width="468" height="67" alt="image" src="https://github.com/user-attachments/assets/5a7b914c-7ff2-4ce3-87af-b5cc1e05f5d8" /> <br>
+
+Worker node <br>
+<img width="403" height="212" alt="image" src="https://github.com/user-attachments/assets/08c477c9-d171-4e05-b687-cad07ec29e4e" /><br>
+<img width="426" height="337" alt="image" src="https://github.com/user-attachments/assets/69b0d172-9052-4f98-aa02-f49b19bfc45f" /><br>
+<img width="409" height="63" alt="image" src="https://github.com/user-attachments/assets/4845773b-27ce-4fd7-b393-b1f40ec7a84b" /><br>
+
+### Step 6 - Install Docker
+
+
+
+
+
+
+
