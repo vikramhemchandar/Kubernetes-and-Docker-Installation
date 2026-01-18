@@ -122,12 +122,12 @@ EOF
 sudo sysctl --system
 ```
 Master node <br>
-<img width="368" height="210" alt="image" src="https://github.com/user-attachments/assets/155c2ddb-ab5c-4cde-ba62-8e7fd95a46a9" /><br>
-<img width="351" height="377" alt="image" src="https://github.com/user-attachments/assets/bd8966f1-cee4-4ea1-a43a-a287be786c4e" />
+<img width="1634" height="932" alt="image" src="https://github.com/user-attachments/assets/36eeee10-35ad-4e41-9186-ea2e47123a6d" /><br>
+<img width="1636" height="1756" alt="image" src="https://github.com/user-attachments/assets/3e6645c0-8e25-4d76-9eaf-059936e80904" /><br>
 
 Worker node <br>
-<img width="388" height="193" alt="image" src="https://github.com/user-attachments/assets/427cc4df-1b00-4f6b-859a-dc268baa2100" /><br>
-<img width="359" height="379" alt="image" src="https://github.com/user-attachments/assets/cccf67a4-6db0-41f6-9d82-3624669f3928" />
+<img width="1630" height="812" alt="image" src="https://github.com/user-attachments/assets/acf2c3cc-26a9-42d1-8336-8262df65aa49" /><br>
+<img width="1664" height="1756" alt="image" src="https://github.com/user-attachments/assets/8322bac2-979d-4f42-b79f-d8749f2953da" /><br>
 
 ### Step 5 - Install kubelet, kubeadm, and kubectl on each node
 This step is to install kubelet, kubeadm, and kubectl on each node to create a Kubernetes cluster. These k8s packages play an important role in managing a Kubernetes cluster
@@ -146,8 +146,6 @@ To install the requisite packages (on both Master and worker nodes)
 ```
 sudo apt install -y ca-certificates curl gpg
 ```
-<img width="468" height="305" alt="image" src="https://github.com/user-attachments/assets/61e0a81b-fb0e-4ddf-a10e-9d14e9589f21" /><br>
-
 Fetch the public key from Google and store it in the folder we created in the previous step. This key is important to verify that the Kubernetes packages we download are genuine and haven't been tampered with
 ```
 sudo mkdir -p /etc/apt/keyrings
@@ -161,7 +159,9 @@ Now again update the package indes
 
 sudo apt update
 ```
-<img width="468" height="163" alt="image" src="https://github.com/user-attachments/assets/41669a30-4845-4ae7-860f-85ded96cffd8" /><br>
+_Note:_ after update, we should see Kubernetes repositories in the packages
+
+<img width="2648" height="2692" alt="image" src="https://github.com/user-attachments/assets/93e80a8e-5132-48b6-8bc7-276481522589" /><br>
 
 Now we are ready to install kubelet, kubeadm, and kubectl (with version and without version)
 ```
@@ -169,7 +169,7 @@ sudo apt install -y kubelet=1.26.5-00 kubeadm=1.26.5-00 kubectl=1.26.5-00
                           or
 sudo apt install -y kubelet kubeadm kubectl
 ```
-<img width="468" height="352" alt="image" src="https://github.com/user-attachments/assets/751c61f9-384d-4efb-a811-76831456d3fc" /><br>
+<img width="2796" height="2100" alt="image" src="https://github.com/user-attachments/assets/947c7f25-09d2-4ffd-b2bf-91f33d2d65f3" /><br>
 
 Lock the version
 ```
@@ -179,7 +179,6 @@ _apt-mark hold_ is used to prevent the automatic installation, upgrade or remova
 <img width="468" height="67" alt="image" src="https://github.com/user-attachments/assets/5a7b914c-7ff2-4ce3-87af-b5cc1e05f5d8" /> <br>
 
 Worker node <br>
-
 <img width="2976" height="1566" alt="image" src="https://github.com/user-attachments/assets/bd1412bb-0923-47d9-bbe3-c02e330da1b6" /><br>
 <img width="2660" height="2102" alt="image" src="https://github.com/user-attachments/assets/fced6a6e-452e-49e5-b331-e913f95d73ae" /><br>
 <img width="409" height="63" alt="image" src="https://github.com/user-attachments/assets/4845773b-27ce-4fd7-b393-b1f40ec7a84b" /><br>
@@ -220,6 +219,58 @@ sudo systemctl enable kubelet.service
 **_Repeat the same commands in worker node_**
 
 ### Step 7 - Initialize the Kubernetes cluster on the master node
+When we initialize a Kubernetes control plane using kubeadm, several components are deployed to manage and orchestrate the cluster. Some examples of these components are kube-apiserver, kube-controller-manager, kube-scheduler, etcd, kube-proxy. We need to download the images of these components by running the following command.
+```
+sudo kubeadm config images pull
+```
+Initialize Kubernetes Cluster with Kubeadm (master node) With all the prerequisites in place, initialize the Kubernetes cluster on the master node using the following Kubeadm command. 
+```
+sudo kubeadm init
+```
+Note: Make sure to copy the kubeadm join after kubeadm init (as shown in the screenshot), this will require to add to the worker node (Step 9)
+<img width="2274" height="204" alt="image" src="https://github.com/user-attachments/assets/5cdc2260-dd96-4332-bd8b-a5209faca8ff" /><br>
+
+To manage the cluster, we should configure kubectl on the master node. Create the .kube directory in the home folder and copy the cluster's admin configuration to the personal .kube directory. Next, change the ownership of the copied configuration file to give the user the permission to use the configuration file to interact with the cluster. Run the following commands on the master node:
+```
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+
+Next, use kubectl commands to check the cluster and node status:
+```
+kubectl get nodes
+```
+Master node<br>
+<img width="2974" height="2974" alt="image" src="https://github.com/user-attachments/assets/af98479d-9f58-4a08-a8e7-4bf184d91b0a" /><br>
+
+### Step 8 - Configure kubectl and Calico
+Install Kubernetes Network Plugin (master node) To enable communication between pods in the cluster, you need a network plugin. Install the Calico network plugin with the following command from the master node:
+```
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml
+```
+Only on Master node<br>
+<img width="2492" height="1188" alt="image" src="https://github.com/user-attachments/assets/c5a7bc63-4df2-429c-ab94-27119f8eddea" /><br>
+
+### Step 9 - Add Worker nodes to the cluster
+The above command gives IP address and a tocketn, copy the the command (as shown below screenshot) and add it in the worker nodes.<br>
+<img width="2274" height="204" alt="image" src="https://github.com/user-attachments/assets/e9bb4ba5-f114-42ac-8f8a-488f5bad738b" /><br>
+```
+kubeadm join 172.31.37.105:6443 --token i2upnd.fp6njjdc1nk2zxm5 \ --discovery-token-ca-cert-hash sha256:4db80163a7040ad51bb144a8088c271428931a9be2e69edf10cb2db62b5c7c97
+```
+On worker node response for kubeadm join<br>
+<img width="2982" height="292" alt="image" src="https://github.com/user-attachments/assets/6d68873c-7cb0-4717-bdae-de457860d302" />
+
+### Step 10 - Verify the cluster and test
+Verify the cluster and test (master node) Finally, we want to verify whether our cluster is successfully created:
+```
+kubectl get pods -n kube-system
+kubectl get nodes
+```
+<img width="1826" height="672" alt="image" src="https://github.com/user-attachments/assets/b19a2c4c-e74e-4b73-bd96-763c73550556" />
+
+
+
 
 
 
