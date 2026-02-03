@@ -35,13 +35,13 @@ Overall, installing Kubernetes on Ubuntu involves steps such as:
 - [9. Adding worker nodes][step9]
 - [10. Verfiy and test][step10]
 
-[step1]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation#step-0---update--upgrade
-[step2]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation#step-1---disable-swap
-[step3]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation#step-3---update-the-etchosts-file-for-hostname-resolution
-[step4]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation#step-4---set-up-the-ipv4-bridge-on-all-nodes
-[step5]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation#step-5---install-kubelet-kubeadm-and-kubectl-on-each-node
-[step6]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation#step-6---install-docker
-[step7]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation#step-7---initialize-the-kubernetes-cluster-on-the-master-node
+[step1]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation?tab=readme-ov-file#step-0---update--upgrade
+[step2]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation?tab=readme-ov-file#step-1---disable-swap
+[step3]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation?tab=readme-ov-file#step-3---update-the-etchosts-file-for-hostname-resolution
+[step4]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation?tab=readme-ov-file#step-4---set-up-the-ipv4-bridge-on-all-nodes
+[step5]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation?tab=readme-ov-file#step-5---install-kubelet-kubeadm-and-kubectl-on-each-node
+[step6]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation?tab=readme-ov-file#step-6---install-docker
+[step7]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation?tab=readme-ov-file#step-7---initialize-the-kubernetes-cluster-on-the-master-node
 [step8]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation?tab=readme-ov-file#step-8---configure-kubectl-and-calico
 [step9]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation?tab=readme-ov-file#step-9---add-worker-nodes-to-the-cluster
 [step10]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation?tab=readme-ov-file#step-10---verify-the-cluster-and-test
