@@ -24,19 +24,27 @@ If the machine meets the above requirements, you are ready to follow this tutori
 Installing Kubernetes is not a straightforward task. To create a flexible and high-performing cluster, it will need to follow several steps other than installing Kubernetes components. Also, we have to configure machines in a way they can communicate with each other
 
 Overall, installing Kubernetes on Ubuntu involves steps such as:
-- [Update & Upgrade][step1]
-- [Disabling swap][step2]
-- Setting up hostnames
-- Setting up the IPV4 bridge on all nodes
-- Installing Kubernetes components on all nodes
-- Installing Docker or a suitable containerization tool
-- Initializing the Kubernetes cluster
-- Configuring Kubectl and Calico
-- Adding worker nodes
+- [1. Update & Upgrade][step1]
+- [2. Disabling swap][step2]
+- [3. Setting up hostnames][step3]
+- [4. Setting up the IPV4 bridge on all nodes][step4]
+- [5. Installing Kubernetes components -kubelet, kubeadm & kubectl on all nodes][step5]
+- [6. Installing Docker or a suitable containerization tool][step6]
+- [7. Initializing the Kubernetes cluster][step7]
+- [8. Configuring Kubectl and Calico][step8]
+- [9. Adding worker nodes][step9]
+- [10. Verfiy and test][step10]
 
 [step1]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation#step-0---update--upgrade
 [step2]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation#step-1---disable-swap
-
+[step3]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation#step-3---update-the-etchosts-file-for-hostname-resolution
+[step4]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation#step-4---set-up-the-ipv4-bridge-on-all-nodes
+[step5]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation#step-5---install-kubelet-kubeadm-and-kubectl-on-each-node
+[step6]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation#step-6---install-docker
+[step7]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation#step-7---initialize-the-kubernetes-cluster-on-the-master-node
+[step8]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation?tab=readme-ov-file#step-8---configure-kubectl-and-calico
+[step9]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation?tab=readme-ov-file#step-9---add-worker-nodes-to-the-cluster
+[step10]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation?tab=readme-ov-file#step-10---verify-the-cluster-and-test
 
 > [!NOTE]
 > Create Two EC2 instances. One for **Master Node** and another for **Worker Node**
