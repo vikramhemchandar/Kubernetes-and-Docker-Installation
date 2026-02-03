@@ -24,7 +24,8 @@ If the machine meets the above requirements, you are ready to follow this tutori
 Installing Kubernetes is not a straightforward task. To create a flexible and high-performing cluster, it will need to follow several steps other than installing Kubernetes components. Also, we have to configure machines in a way they can communicate with each other
 
 Overall, installing Kubernetes on Ubuntu involves steps such as:
-- Disabling swap
+- [Update & Upgrade][step1]
+- [Disabling swap][step2]
 - Setting up hostnames
 - Setting up the IPV4 bridge on all nodes
 - Installing Kubernetes components on all nodes
@@ -32,6 +33,10 @@ Overall, installing Kubernetes on Ubuntu involves steps such as:
 - Initializing the Kubernetes cluster
 - Configuring Kubectl and Calico
 - Adding worker nodes
+
+[step1]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation#step-0---update--upgrade
+[step2]:https://github.com/vikramhemchandar/Kubernetes-and-Docker-Installation#step-1---disable-swap
+
 
 > [!NOTE]
 > Create Two EC2 instances. One for **Master Node** and another for **Worker Node**
