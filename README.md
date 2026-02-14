@@ -19,6 +19,7 @@ If the machine meets the above requirements, you are ready to follow this tutori
 
 > [!NOTE]
 > It is recommended to install Kubernetes on Ubuntu 22.04 LTS (Jammy Jellyfish). Using the official Kubernetes documentation for installing and managing Kubernetes on Ubuntu 22.04 provides significant advantages in terms of reliability, security, and accuracy, particularly by leveraging kubeadm for cluster bootstrapping. It ensures that the installation follows best practices, such as disabling swap, using appropriate container runtimes (like containerd), and setting up necessary CNI plugins.
+> However, if you need only Kubernetes installation, skip step 3 and 4
 
 ## Installing Kubernetes on Ubuntu
 Installing Kubernetes is not a straightforward task. To create a flexible and high-performing cluster, it will need to follow several steps other than installing Kubernetes components. Also, we have to configure machines in a way they can communicate with each other
